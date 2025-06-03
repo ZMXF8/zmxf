@@ -1,19 +1,45 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZMXF 网络检站</title>
+  <title>ZMXF 网络检测站</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header><h1>ZMXF 网络检站</h1></header>
+  <header><h1>ZMXF 网络检测站</h1></header>
   <main>
     <div id="info">加载中...</div>
+
+    <!-- ✅ 国旗与国家展示区 -->
+    <div id="location" style="margin-top:10px; display:flex; align-items:center; gap:10px;">
+      <img id="flag" src="" alt="Flag" width="24" height="18" style="display:none; border:1px solid #ccc;">
+      <span id="country">正在检测国家...</span>
+    </div>
+
     <button onclick="capture()">📸 一键截图保存</button>
   </main>
+
   <footer>由付星晨 + ChatGPT 联合开发</footer>
   <script src="script.js"></script>
+
+  <!-- ✅ 添加国旗加载脚本 -->
+  <script>
+    fetch("https://ipinfo.io/json?token=你的Token") // 建议用你自己的token
+      .then(res => res.json())
+      .then(data => {
+        const countryCode = data.country?.toLowerCase();
+        const countryName = data.country || '未知';
+        if (countryCode) {
+          document.getElementById('flag').src = `https://flagcdn.com/24x18/${countryCode}.png`;
+          document.getElementById('flag').style.display = 'inline';
+        }
+        document.getElementById('country').textContent = countryName;
+      })
+      .catch(err => {
+        console.error("国家检测失败", err);
+        document.getElementById('country').textContent = '国家信息不可用';
+      });
+  </script>
 </body>
 </html>
